@@ -13,7 +13,7 @@
     <Cell span={6} align="middle">
         <h1>{title}</h1>
         <!-- todo code formatting -->
-        <p class="output">{transformed}</p>
+        <p class="output">{transformed} <CopyButton value={transformed}/></p>
         <Textfield style="width: 100%"
                    textarea bind:value={textareaValue}
                    label={textFieldLabel}></Textfield>
@@ -30,8 +30,8 @@
             <div class="card">
                 <Card>
                     <Content>
-                        <div>Text: {conversion.text}</div>
-                        <div>Base64: {conversion.base64}</div>
+                        <div>Text: {conversion.text}  <CopyButton  value={conversion.text}/></div>
+                        <div>Base64: {conversion.base64}  <CopyButton value={conversion.base64}/></div>
                     </Content>
                 </Card>
             </div>
@@ -48,6 +48,7 @@
     import Button, {Label} from '@smui/button'
     import type {Transform} from "./types"
     import {Mode} from "./types"
+    import CopyButton from "./common/CopyButton.svelte";
 
     export let title: String
     export let textFieldLabel: String
