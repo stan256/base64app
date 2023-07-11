@@ -12,8 +12,9 @@
 <LayoutGrid>
     <Cell span={6} align="middle">
         <h1>{title}</h1>
-        <!-- todo code formatting -->
-        <p class="output">{transformed} <CopyButton value={transformed}/></p>
+        <p class="output">{transformed}
+            <CopyButton value={transformed}/>
+        </p>
         <Textfield style="width: 100%"
                    textarea bind:value={textareaValue}
                    label={textFieldLabel}></Textfield>
@@ -21,17 +22,27 @@
             <Button on:click={addNew} touch variant="raised" disabled={textareaValue.length === 0}>
                 <Label>Save result</Label>
             </Button>
-            <!-- todo - save with note -->
         </p>
     </Cell>
     <Cell span={6} align="middle">
-        <!--        todo to like options (to put them in the top) -->
+        <!-- todo code formatting -->
+        <!-- todo - save with note -->
+        <!-- todo to like options (to put them in the top) -->
+        <!-- todo incorrect decoded base64 message -->
         {#each transformations as conversion, i}
             <div class="card">
                 <Card>
                     <Content>
-                        <div>Text: {conversion.text}  <CopyButton  value={conversion.text}/></div>
-                        <div>Base64: {conversion.base64}  <CopyButton value={conversion.base64}/></div>
+                        <div class="flex-vertical-center">
+                            <Icon class="material-icons">text_fields</Icon>
+                            <span>{formatIfJson(conversion.text)}</span>
+                            <CopyButton value={conversion.text}/>
+                        </div>
+                        <div class="flex-vertical-center">
+                            <Icon class="material-icons">data_object</Icon>
+                            <span>{conversion.base64}</span>
+                            <CopyButton value={conversion.base64}/>
+                        </div>
                     </Content>
                 </Card>
             </div>
@@ -49,11 +60,28 @@
     import type {Transform} from "./types"
     import {Mode} from "./types"
     import CopyButton from "./common/CopyButton.svelte";
+    import Icon from "@smui/textfield/icon";
+
 
     export let title: String
     export let textFieldLabel: String
     export let mode: Mode
 
+    function formatIfJson(str: String) {
+        if (isJsonString(str))
+            return JSON.stringify(str, null, 2)
+        else
+            return str
+    }
+
+    function isJsonString(str: String) {
+        try {
+            JSON.parse(str)
+        } catch (e) {
+            return false
+        }
+        return true;
+    }
 
     let transformations: Transform[] = [{
         saved: Date.now(),
