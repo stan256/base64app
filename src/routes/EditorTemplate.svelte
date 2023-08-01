@@ -1,18 +1,13 @@
 <style>
     .card {
         margin-top: 15px;
-        overflow-wrap: break-word;
-    }
-
-    .output {
-        overflow-wrap: break-word;
     }
 </style>
 
 <LayoutGrid>
     <Cell span={6} align="middle">
         <h1>{title}</h1>
-        <p class="output">{transformed}
+        <p class="overflow-break-anywhere">{transformed}
             <CopyButton value={transformed}/>
         </p>
         <Textfield style="width: 100%"
@@ -25,22 +20,21 @@
         </p>
     </Cell>
     <Cell span={6} align="middle">
-        <!-- todo code formatting -->
         <!-- todo - save with note -->
-        <!-- todo to like options (to put them in the top) -->
-        <!-- todo incorrect decoded base64 message -->
+        <!-- todo incorrect decoded base64 message      -->
+        <!-- todo command + enter => hotkey translate    -->
         {#each transformations as conversion, i}
-            <div class="card">
+            <div class="card overflow-break-anywhere">
                 <Card>
                     <Content>
                         <div class="flex-vertical-center">
                             <Icon class="material-icons">text_fields</Icon>
-                            <span>{formatIfJson(conversion.text)}</span>
+                            <pre><code class="overflow-break-anywhere" contenteditable="true" bind:innerHTML={conversion.text}></code></pre>
                             <CopyButton value={conversion.text}/>
                         </div>
                         <div class="flex-vertical-center">
                             <Icon class="material-icons">data_object</Icon>
-                            <span>{conversion.base64}</span>
+                            <span class="overflow-break-anywhere" style="white-space: pre-line">{conversion.base64}</span>
                             <CopyButton value={conversion.base64}/>
                         </div>
                     </Content>
@@ -68,19 +62,15 @@
     export let mode: Mode
 
     function formatIfJson(str: String) {
-        if (isJsonString(str))
-            return JSON.stringify(str, null, 2)
-        else
-            return str
-    }
-
-    function isJsonString(str: String) {
         try {
-            JSON.parse(str)
+            let s = JSON.stringify(JSON.parse(str), null, 2);
+            console.log("we are here")
+            console.log(s);
+            return s
         } catch (e) {
-            return false
+            console.log("catch", e)
+            return str
         }
-        return true;
     }
 
     let transformations: Transform[] = [{
@@ -106,8 +96,8 @@
         if (textareaValue.length != 0) {
             transformations = [...transformations, {
                 saved: Date.now(),
-                base64: mode === Mode.Encode ? transformed : textareaValue,
-                text: mode === Mode.Encode ? textareaValue : transformed
+                base64: mode === Mode.Encode ? transformed : formatIfJson(textareaValue),
+                text: mode === Mode.Encode ? formatIfJson(textareaValue) : transformed
             }]
             textareaValue = ""
         }

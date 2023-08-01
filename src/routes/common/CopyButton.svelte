@@ -12,8 +12,9 @@
 
 </script>
 
-<IconButton on:click={copy}>
-    {#if value}
+
+{#if value}
+    <IconButton on:click={copy}>
         <Icon class="material-icons">content_copy</Icon>
-    {/if}
-</IconButton>
+    </IconButton>
+{/if}
