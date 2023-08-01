@@ -2,47 +2,64 @@
     .card {
         margin-top: 15px;
     }
+
+    .switch {
+        margin-left: 10px;
+    }
 </style>
 
-<LayoutGrid>
-    <Cell span={6} align="middle">
-        <h1>{title}</h1>
-        <p class="overflow-break-anywhere">{transformed}
-            <CopyButton value={transformed}/>
-        </p>
-        <Textfield style="width: 100%"
-                   textarea bind:value={textareaValue}
-                   label={textFieldLabel}></Textfield>
-        <p>
-            <Button on:click={addNew} touch variant="raised" disabled={textareaValue.length === 0}>
-                <Label>Save result</Label>
-            </Button>
-        </p>
-    </Cell>
-    <Cell span={6} align="middle">
-        <!-- todo - save with note -->
-        <!-- todo incorrect decoded base64 message      -->
-        <!-- todo command + enter => hotkey translate    -->
-        {#each transformations as conversion, i}
-            <div class="card overflow-break-anywhere">
-                <Card>
-                    <Content>
-                        <div class="flex-vertical-center">
-                            <Icon class="material-icons">text_fields</Icon>
-                            <pre><code class="overflow-break-anywhere" contenteditable="true" bind:innerHTML={conversion.text}></code></pre>
-                            <CopyButton value={conversion.text}/>
-                        </div>
-                        <div class="flex-vertical-center">
-                            <Icon class="material-icons">data_object</Icon>
-                            <span class="overflow-break-anywhere" style="white-space: pre-line">{conversion.base64}</span>
-                            <CopyButton value={conversion.base64}/>
-                        </div>
-                    </Content>
-                </Card>
-            </div>
-        {/each}
-    </Cell>
-</LayoutGrid>
+
+<div>
+    <div class="flex-vertical-center flex-horizontal-center">
+        <h3 class="inline-block">{#if mode === Mode.Encode} Encode {:else} Decode {/if}</h3>
+        <label class="switch">
+            <input type="checkbox" checked={mode === Mode.Encode} on:click={switchMode}>
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <LayoutGrid>
+        <Cell span={6} align="middle">
+            <h2>{title}</h2>
+            <p class="overflow-break-anywhere">{transformed}
+                <CopyButton value={transformed}/>
+            </p>
+            <Textfield style="width: 100%"
+                       textarea bind:value={textareaValue}
+                       label={textFieldLabel}></Textfield>
+            <p>
+                <Button on:click={addNew} touch variant="raised" disabled={textareaValue.length === 0}>
+                    <Label>Save result</Label>
+                </Button>
+            </p>
+        </Cell>
+        <Cell span={6} align="middle">
+            <h2>History</h2>
+            <!-- todo - save with note -->
+            <!-- todo incorrect decoded base64 message      -->
+            <!-- todo command + enter => hotkey translate    -->
+            {#each transformations as conversion, i}
+                <div class="card overflow-break-anywhere">
+                    <Card>
+                        <Content>
+                            <div class="flex-vertical-center">
+                                <Icon class="material-icons">text_fields</Icon>
+                                <pre><code class="overflow-break-anywhere" contenteditable="true"
+                                           bind:innerHTML={conversion.text}></code></pre>
+                                <CopyButton value={conversion.text}/>
+                            </div>
+                            <div class="flex-vertical-center">
+                                <Icon class="material-icons">data_object</Icon>
+                                <span class="overflow-break-anywhere"
+                                      style="white-space: pre-line">{conversion.base64}</span>
+                                <CopyButton value={conversion.base64}/>
+                            </div>
+                        </Content>
+                    </Card>
+                </div>
+            {/each}
+        </Cell>
+    </LayoutGrid>
+</div>
 
 
 <script lang="ts">
@@ -55,20 +72,22 @@
     import {Mode} from "./types"
     import CopyButton from "./common/CopyButton.svelte";
     import Icon from "@smui/textfield/icon";
-
+    import {goto} from "$app/navigation";
 
     export let title: String
     export let textFieldLabel: String
     export let mode: Mode
 
+    function switchMode() {
+        if (mode === Mode.Encode) goto("/decode")
+        else goto("/encode")
+    }
+
     function formatIfJson(str: String) {
         try {
-            let s = JSON.stringify(JSON.parse(str), null, 2);
-            console.log("we are here")
-            console.log(s);
-            return s
+            return JSON.stringify(JSON.parse(str), null, 2)
         } catch (e) {
-            console.log("catch", e)
+            console.log("not a json", e)
             return str
         }
     }
