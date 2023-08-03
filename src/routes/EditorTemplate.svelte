@@ -22,8 +22,13 @@
     $: {
         if (mode === Mode.Encode)
             transformed = Base64.encode(textareaValue)
-        else
-            transformed = Base64.decode(textareaValue)
+        else {
+            try {
+                transformed = Base64.decode(textareaValue)
+            } catch (e) {
+                // ignored ...
+            }
+        }
     }
 
     function switchMode() {
@@ -95,9 +100,7 @@
         <Cell span={6} align="top">
             <h2>History</h2>
             <!-- todo - save with note -->
-            <!-- todo incorrect decoded base64 message      -->
             <!-- todo command + enter => hotkey translate    -->
-            <!-- todo check Svelte state instead of cookies -->
             {#each $transformations as conversion, i}
                 <div class="card overflow-break-anywhere">
                     <Card>
