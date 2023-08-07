@@ -11,7 +11,6 @@
     import {goto} from "$app/navigation"
     import {onMount} from 'svelte'
     import {writable} from 'svelte/store'
-    import { base } from '$app/paths';
 
     export let title: String
     export let textFieldLabel: String
@@ -37,8 +36,8 @@
     }
 
     function switchMode() {
-        if (mode === Mode.Encode) goto(`${base}/decode`)
-        else goto(`${base}/encode`)
+        if (mode === Mode.Encode) goto(`/decode`)
+        else goto(`/encode`)
     }
 
     function formatIfJson(str: String) {

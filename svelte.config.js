@@ -3,13 +3,15 @@ import {
 	vitePreprocess
 } from '@sveltejs/kit/vite';
 
+const dev = process.argv.includes('dev')
+
 const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapter({strict: false}),
+		adapter: adapter(),
 		paths: {
-			base: process.env.NODE_ENV === 'production' ? '' : '',
+			base: dev ? '' : process.env.BASE_PATH
 		}
 	}
 };
