@@ -38,7 +38,7 @@
 
     function switchMode() {
         if (mode === Mode.Encode) goto(`${base}/decode`)
-        else goto("/encode")
+        else goto(`${base}/encode`)
     }
 
     function formatIfJson(str: String) {
