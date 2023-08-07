@@ -8,12 +8,12 @@
   $secondary: #676778,
   $surface: #fff,
   $background: #fff,
-  $error: color-palette.$red-900
+  $error: color-palette.$red-900,
+  $main: #411681,
 );
 
 html,
 body {
-  background-color: theme.$surface;
   color: theme.$on-surface;
 }
 

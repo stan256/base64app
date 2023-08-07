@@ -18,15 +18,19 @@
 
     let transformations = writable<Transform[]>([])
     let textareaValue = ""
+    let canSave: boolean
     let transformed
     $: {
-        if (mode === Mode.Encode)
+        if (mode === Mode.Encode) {
             transformed = Base64.encode(textareaValue)
-        else {
+            canSave = true
+        } else {
             try {
                 transformed = Base64.decode(textareaValue)
+                canSave = true
             } catch (e) {
                 // ignored ...
+                canSave = false
             }
         }
     }
@@ -61,6 +65,11 @@
         textareaValue = ""
     }
 
+    function clearHistory() {
+        transformations.update(prev => [])
+        localStorage.setItem('transformations', JSON.stringify([]))
+    }
+
     onMount(() => {
         transformations.update(prev => {
             let items = JSON.parse(localStorage.getItem("transformations") || "[]");
@@ -72,7 +81,7 @@
     })
 </script>
 
-<div>
+<div class="body-content">
     <div class="flex-vertical-center flex-horizontal-center">
         <h3 class="inline-block">
             {#if mode === Mode.Encode} Encode{:else} Decode{/if}
@@ -88,12 +97,17 @@
             <p class="overflow-break-anywhere">{transformed}
                 <CopyButton value={transformed}/>
             </p>
-            <Textfield style="width: 100%"
+            <Textfield class="textarea"
                        textarea bind:value={textareaValue}
                        label={textFieldLabel}></Textfield>
             <p>
-                <Button on:click={addNew} touch variant="raised" disabled={textareaValue.length === 0}>
+                <Button on:click={addNew} touch variant="raised" disabled={textareaValue.length === 0 || !canSave}>
                     <Label>Save result</Label>
+                </Button>
+            </p>
+            <p>
+                <Button on:click={clearHistory} touch variant="raised" disabled={$transformations.length === 0}>
+                    <Label>Clear history</Label>
                 </Button>
             </p>
         </Cell>
@@ -103,14 +117,17 @@
             <!-- todo command + enter => hotkey translate    -->
             {#each $transformations as conversion, i}
                 <div class="card overflow-break-anywhere">
-                    <Card>
+                    <Card style="box-shadow: none; border: 2px solid #411681">
                         <Content>
-                            <div class="flex-vertical-center">
+                            <div class="flex-vertical-center" style="overflow: auto">
                                 <Icon class="material-icons">text_fields</Icon>
                                 <pre><code class="overflow-break-anywhere" contenteditable="true"
-                                           bind:innerHTML={conversion.text}></code></pre>
+                                           bind:textContent={conversion.text}></code></pre>
                                 <CopyButton value={conversion.text}/>
                             </div>
+                        </Content>
+                        <span class="separator"/>
+                        <Content>
                             <div class="flex-vertical-center">
                                 <Icon class="material-icons">data_object</Icon>
                                 <span class="overflow-break-anywhere"
@@ -125,12 +142,18 @@
     </LayoutGrid>
 </div>
 
-<style>
-    .card {
-        margin-top: 15px;
+<style lang="scss">
+  .card {
+    &:not(:first-child) {
+      margin-top: 25px;
     }
+  }
 
-    .switch {
-        margin-left: 10px;
-    }
+  .body-content :global(.textarea) {
+    width: 100%;
+  }
+
+  .switch {
+    margin-left: 10px;
+  }
 </style>

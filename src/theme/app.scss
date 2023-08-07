@@ -1,3 +1,22 @@
+* {
+  font-family: Roboto, sans-serif;
+}
+
+
+.global {
+  background-image: url("background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100%;
+}
+
+.body-content {
+  background-color: #fff;
+  border-radius: 15px;
+}
+
+
 .flex-vertical-center {
   display: flex;
   align-items: center;
@@ -14,6 +33,11 @@
 
 .inline-block {
   display: inline-block;
+}
+
+.separator {
+  font-size: 0;
+  border-bottom: 1px solid #411681;
 }
 
 // Switch
@@ -55,11 +79,11 @@
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #411681;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #411681;
 }
 
 input:checked + .slider:before {
