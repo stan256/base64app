@@ -2,7 +2,7 @@
     import IconButton from '@smui/icon-button'
     import Icon from "@smui/textfield/icon";
 
-    export let value: String
+    export let value: string
 
     const copy = () => {
         if (value) {

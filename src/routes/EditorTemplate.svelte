@@ -11,15 +11,17 @@
     import {goto} from "$app/navigation"
     import {onMount} from 'svelte'
     import {writable} from 'svelte/store'
+    import {base} from "$app/paths";
 
-    export let title: String
-    export let textFieldLabel: String
+    export let title: string
+    export let textFieldLabel: string
     export let mode: Mode
 
     let transformations = writable<Transform[]>([])
     let textareaValue = ""
     let canSave: boolean
-    let transformed
+    let transformed: string
+
     $: {
         if (mode === Mode.Encode) {
             transformed = Base64.encode(textareaValue)
@@ -36,11 +38,11 @@
     }
 
     function switchMode() {
-        if (mode === Mode.Encode) goto(`/decode`)
-        else goto(`/encode`)
+        if (mode === Mode.Encode) goto(`${base}/decode`)
+        else goto(`${base}/encode`)
     }
 
-    function formatIfJson(str: String) {
+    function formatIfJson(str: string) {
         try {
             return JSON.stringify(JSON.parse(str), null, 2)
         } catch (e) {
