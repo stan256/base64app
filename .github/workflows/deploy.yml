@@ -39,6 +39,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
+      pages: write
       contents: read
       id-token: write
 
@@ -49,4 +50,4 @@ jobs:
     steps:
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v2
