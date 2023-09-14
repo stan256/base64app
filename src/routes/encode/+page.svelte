@@ -9,3 +9,6 @@
         mode={Mode.Encode}
 ></EditorTemplate>
 
+<svelte:head>
+    <title>Base64 Decoder</title>
+</svelte:head>
