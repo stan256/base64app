@@ -30,22 +30,56 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
+
       - name: Install dependencies
         run: npm install
+
       - name: Build
         run: npm run build
+
+      - name: Generate the sitemap
+        id: sitemap
+        uses: cicirello/generate-sitemap@v1
+        with:
+          base-url-path: https://base64.biz/
+
+      - name: Output stats
+        run: |
+          echo "sitemap-path = ${{ steps.sitemap.outputs.sitemap-path }}"
+          echo "url-count = ${{ steps.sitemap.outputs.url-count }}"
+          echo "excluded-count = ${{ steps.sitemap.outputs.excluded-count }}"
+
+#      - name: Create Pull Request
+#        uses: peter-evans/create-pull-request@v5.0.2
+#        with:
+#          title: "Automated sitemap update"
+#          body: >
+#            Automated changes. Sitemap updated by
+#            the [generate-sitemap](https://github.com/cicirello/generate-sitemap)
+#            GitHub action.
+#          commit-message: "Automated sitemap update."
+#          author: Stanislav Studzinskyi <stan256@users.noreply.github.com>
+#          committer: Stanislav Studzinskyi <stan256@users.noreply.github.com>
+#          branch: create-pull-request/sitemap
+#          delete-branch: true
+
       - name: Setup Pages
         uses: actions/configure-pages@v3
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload dist repository
           path: './build'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1

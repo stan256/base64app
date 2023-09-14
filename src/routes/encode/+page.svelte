@@ -11,4 +11,6 @@
 
 <svelte:head>
     <title>Base64 Decoder</title>
+    <meta name="description" content="Decode base64 text and effortlessly store results in your browsing history with this handy tool.">
+    <html lang="en"></html>
 </svelte:head>

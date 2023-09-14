@@ -94,7 +94,7 @@
     </div>
     <LayoutGrid>
         <Cell span={6} align="top">
-            <h2>{title}</h2>
+            <h1>{title}</h1>
             <p class="overflow-break-anywhere">{transformed}
                 <CopyButton value={transformed}/>
             </p>
@@ -113,7 +113,7 @@
             </p>
         </Cell>
         <Cell span={6} align="top">
-            <h2>History</h2>
+            <h1>History</h1>
             <!-- todo - save with note -->
             <!-- todo command + enter => hotkey translate    -->
             {#each $transformations as conversion, i}
