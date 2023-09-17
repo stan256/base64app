@@ -4,7 +4,7 @@ import type { LayoutServerLoad } from './$types';
 export const load = (({ url }) => {
     let searchElement = url.pathname;
     console.log(`${searchElement} - searchElement`)
-    if (!searchElement.endsWith("encode") && !searchElement.endsWith("decode")) {
+    if (!searchElement.endsWith("encode") && !searchElement.endsWith("decode") && !searchElement.endsWith("sitemap.xml")) {
         console.log(`${searchElement} - searchElement, Redirecting to encode`)
         throw redirect(302, `/encode`)
     }
