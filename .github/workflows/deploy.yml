@@ -11,9 +11,10 @@ on:
 
 # Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
+  pull-requests: write
 
 # Allow one concurrent deployment
 concurrency:
@@ -57,19 +58,19 @@ jobs:
           echo "url-count = ${{ steps.sitemap.outputs.url-count }}"
           echo "excluded-count = ${{ steps.sitemap.outputs.excluded-count }}"
 
-#      - name: Create Pull Request
-#        uses: peter-evans/create-pull-request@v5.0.2
-#        with:
-#          title: "Automated sitemap update"
-#          body: >
-#            Automated changes. Sitemap updated by
-#            the [generate-sitemap](https://github.com/cicirello/generate-sitemap)
-#            GitHub action.
-#          commit-message: "Automated sitemap update."
-#          author: Stanislav Studzinskyi <stan256@users.noreply.github.com>
-#          committer: Stanislav Studzinskyi <stan256@users.noreply.github.com>
-#          branch: create-pull-request/sitemap
-#          delete-branch: true
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5.0.2
+        with:
+          title: "Automated sitemap update"
+          body: >
+            Automated changes. Sitemap updated by
+            the [generate-sitemap](https://github.com/cicirello/generate-sitemap)
+            GitHub action.
+          commit-message: "Automated sitemap update."
+          author: Stanislav Studzinskyi <stan256@users.noreply.github.com>
+          committer: Stanislav Studzinskyi <stan256@users.noreply.github.com>
+          branch: create-pull-request/sitemap
+          delete-branch: true
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
