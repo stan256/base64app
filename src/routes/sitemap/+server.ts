@@ -1,3 +1,5 @@
+export const prerender = true
+
 export async function GET() {
     return new Response(
         `
@@ -11,10 +13,10 @@ export async function GET() {
 			xmlns:video="https://www.google.com/schemas/sitemap-video/1.1"
 		>
 			<url>
-			    <loc>https://base64app.com/encode</loc>
+			    <loc>https://base64.biz/encode</loc>
 			</url>
 			<url>
-			    <loc>https://base64app.com/decode</loc>
+			    <loc>https://base64.biz/decode</loc>
 			</url>
 		</urlset>`.trim(),
         {
